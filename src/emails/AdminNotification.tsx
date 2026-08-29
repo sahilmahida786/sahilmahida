@@ -26,7 +26,7 @@ export const AdminNotification = ({
   projectType = "Website",
   message = "This is a test message.",
   timestamp = new Date().toISOString(),
-  sourceUrl = "https://sahilmahida.com",
+  sourceUrl = "https://sahilmahida.in",
 }: AdminNotificationProps) => {
   return (
     <Html>

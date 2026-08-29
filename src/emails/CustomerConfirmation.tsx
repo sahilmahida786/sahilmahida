@@ -70,7 +70,7 @@ export const CustomerConfirmation = ({
             <Text style={signatureCompany}>SAHIL.OS</Text>
             
             <Text style={footerLink}>
-              Website: <a href="https://sahilmahida.com" style={link}>sahilmahida.com</a>
+              Website: <a href="https://sahilmahida.in" style={link}>sahilmahida.in</a>
             </Text>
           </Section>
         </Container>

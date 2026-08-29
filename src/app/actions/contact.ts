@@ -7,7 +7,7 @@ import { CustomerConfirmation } from "@/emails/CustomerConfirmation";
 
 // Ensure environment variables are typed properly.
 const resendApiKey = process.env.RESEND_API_KEY;
-const contactEmail = process.env.CONTACT_EMAIL || "contact@sahilmahida.com"; // Fallback for types
+const contactEmail = process.env.CONTACT_EMAIL || "sahilmahida.dev@gmail.com";
 const fromEmail = process.env.FROM_EMAIL || "onboarding@resend.dev"; // Default Resend test email
 
 // Initialize Resend conditionally to avoid build-time crashes if missing
