@@ -201,14 +201,15 @@ export default function Navigation() {
       {isOpen && (
         <div
           id="mobile-nav"
-          className="fixed inset-0 top-16 z-40 md:hidden"
+          className="fixed inset-0 top-16 z-[60] md:hidden"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
         >
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-[2px] animate-fade-in motion-reduce:animate-none"
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            style={{ animation: "mobileMenuFadeIn 200ms ease-out forwards" }}
             onClick={close}
             aria-hidden="true"
           />
@@ -216,25 +217,36 @@ export default function Navigation() {
           {/* Menu Panel */}
           <div
             ref={menuRef}
-            className={cn(
-              "absolute inset-x-0 top-0 overflow-y-auto pb-8",
-              "bg-gradient-to-b from-[#05070B] to-[hsl(225,25%,4%)] border-b border-border/50",
-              "shadow-[0_20px_40px_rgba(0,0,0,0.4)]",
-              "animate-slide-down motion-reduce:animate-none"
-            )}
+            className="absolute inset-x-0 top-0 overflow-y-auto pb-8 border-b border-border/50 shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
             style={{
-              backgroundImage: "radial-gradient(100% 100% at 50% 0%, hsla(215, 60%, 40%, 0.05), transparent 80%), linear-gradient(to bottom, #05070B, hsl(225,25%,4%))"
+              animation: "mobileMenuSlideDown 250ms ease-out forwards",
+              background: "radial-gradient(100% 100% at 50% 0%, hsla(215,60%,40%,0.06), transparent 80%), linear-gradient(to bottom, #05070B, hsl(225,25%,4%))"
             }}
           >
-            <nav className="flex h-full flex-col px-[var(--spacing-container)] pt-6">
-              <ul className="flex flex-col gap-2" role="list">
+            <style>{`
+              @keyframes mobileMenuFadeIn {
+                from { opacity: 0; }
+                to   { opacity: 1; }
+              }
+              @keyframes mobileMenuSlideDown {
+                from { opacity: 0; transform: translateY(-8px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              @keyframes mobileNavItem {
+                from { opacity: 0; transform: translateY(6px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+            `}</style>
+
+            <nav className="flex h-full flex-col px-[var(--spacing-container)] pt-6" aria-label="Mobile navigation">
+              <ul className="flex flex-col" role="list">
                 {navigation.map((link, i) => (
                   <li
                     key={link.section}
-                    className="opacity-0 motion-reduce:opacity-100"
                     style={{
-                      animation: "linkStagger 300ms ease-out forwards",
-                      animationDelay: `${i * 40}ms`
+                      animation: `mobileNavItem 280ms ease-out forwards`,
+                      animationDelay: `${60 + i * 45}ms`,
+                      opacity: 0,
                     }}
                   >
                     <Link
@@ -243,21 +255,18 @@ export default function Navigation() {
                       className={cn(
                         "group flex items-center justify-between",
                         "py-5 border-b border-border/30",
-                        "text-h3 text-muted font-medium",
-                        "transition-all duration-[var(--duration-fast)]",
-                        "hover:text-foreground active:scale-[0.98]"
+                        "text-h3 text-foreground/80 font-medium",
+                        "transition-colors duration-150",
+                        "hover:text-foreground active:opacity-70"
                       )}
                     >
                       <span className="flex items-center gap-4">
-                        <span className="text-label text-subtle font-mono group-hover:text-accent/70 transition-colors">
+                        <span className="text-label text-accent/60 font-mono tabular-nums">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <span className="relative">
-                          {link.label}
-                          <span className="absolute -left-4 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-accent opacity-0 scale-50 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 group-hover:-left-6" />
-                        </span>
+                        <span>{link.label}</span>
                       </span>
-                      <ArrowUpRight size={20} className="text-subtle/50 group-hover:text-accent transition-colors" />
+                      <ArrowUpRight size={18} className="text-subtle/50 group-hover:text-accent transition-colors shrink-0" />
                     </Link>
                   </li>
                 ))}
@@ -265,10 +274,11 @@ export default function Navigation() {
 
               {/* Mobile CTA */}
               <div
-                className="mt-6 pt-4 pb-4 opacity-0 motion-reduce:opacity-100"
+                className="mt-8 pb-4"
                 style={{
-                  animation: "linkStagger 300ms ease-out forwards",
-                  animationDelay: `${navigation.length * 40}ms`
+                  animation: "mobileNavItem 280ms ease-out forwards",
+                  animationDelay: `${60 + navigation.length * 45}ms`,
+                  opacity: 0,
                 }}
               >
                 <Link
@@ -278,10 +288,9 @@ export default function Navigation() {
                     "flex items-center justify-center gap-2",
                     "h-14 w-full rounded-[var(--radius-lg)]",
                     "bg-gradient-to-br from-accent to-accent-hover",
-                    "text-white text-body font-medium",
-                    "border border-accent-hover/50 shadow-[0_4px_16px_rgba(59,130,246,0.15)]",
-                    "transition-all duration-[var(--duration-fast)]",
-                    "active:scale-[0.98] hover:shadow-[0_8px_24px_rgba(59,130,246,0.25)]"
+                    "text-white text-body font-semibold",
+                    "shadow-[0_4px_20px_rgba(59,130,246,0.2)]",
+                    "active:scale-[0.98] transition-all duration-150"
                   )}
                 >
                   Hire Me
