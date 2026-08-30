@@ -61,7 +61,6 @@ export default function Contact() {
                   </div>
                   <h3 className="text-h3 font-bold text-emerald-400">PROJECT REQUEST RECEIVED</h3>
                   <p className="text-body text-emerald-200/80">{state.message}</p>
-                  <p className="text-body-sm text-emerald-200/60 mt-2">I&apos;ll review your requirements and respond within 24 hours.</p>
                 </div>
               ) : (
                 <>

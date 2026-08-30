@@ -1,19 +1,9 @@
 "use server";
 
-import * as React from "react";
 import { z } from "zod";
-import { Resend } from "resend";
-import { AdminNotification } from "@/emails/AdminNotification";
-import { CustomerConfirmation } from "@/emails/CustomerConfirmation";
 
 // Environment variables — read server-side only.
-// RESEND_API_KEY, CONTACT_EMAIL, FROM_EMAIL are never exposed to the client.
-const resendApiKey = process.env.RESEND_API_KEY;
-const contactEmail = process.env.CONTACT_EMAIL || "sahilmahida786@gmail.com";
-const fromEmail = process.env.FROM_EMAIL || "onboarding@resend.dev";
-
-// Initialize Resend conditionally to avoid build-time crashes when env var is absent.
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const web3formsAccessKey = process.env.WEB3FORMS_ACCESS_KEY;
 
 // Zod schema — field names must match the form's name attributes exactly.
 const contactSchema = z.object({
@@ -55,7 +45,7 @@ export async function submitContactForm(
       // Honeypot triggered — silently pretend success to confuse bots.
       if (validatedFields.error.flatten().fieldErrors.company_website) {
         console.warn("[contact] Honeypot triggered — dropping submission.");
-        return { success: true, message: "Project inquiry received." };
+        return { success: true, message: "Thank you! Your project request has been received. I'll get back to you soon." };
       }
 
       console.warn("[contact] Validation failed:", validatedFields.error.flatten().fieldErrors);
@@ -68,74 +58,50 @@ export async function submitContactForm(
 
     const { name, email, projectType, message } = validatedFields.data;
 
-    // 3. Guard: Resend not initialized (missing API key)
-    if (!resend) {
-      console.error("[contact] RESEND_API_KEY is not set — cannot send email.");
+    // 3. Guard: Web3Forms access key not set
+    if (!web3formsAccessKey) {
+      console.error("[contact] WEB3FORMS_ACCESS_KEY is not set.");
       return {
         success: false,
         message: "Server configuration error. Please contact me directly via email.",
       };
     }
 
-    const timestamp = new Date().toISOString();
-    const sourceUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.in";
+    // 4. Send email via Web3Forms API
+    const payload = {
+      access_key: web3formsAccessKey,
+      subject: "New Project Inquiry — Sahil Mahida Portfolio",
+      from_name: "SAHIL.OS Portfolio",
+      replyto: email,
+      name,
+      email,
+      "Project Type": projectType, // Make it readable in the email
+      message,
+    };
 
-    // 4. Send admin notification email
-    const { data: adminData, error: adminError } = await resend.emails.send({
-      from: `SAHIL.OS <${fromEmail}>`,
-      to: [contactEmail],
-      replyTo: email,
-      subject: `🔥 NEW PROJECT INQUIRY — ${projectType} — ${name}`,
-      react: React.createElement(AdminNotification, {
-        name,
-        email,
-        projectType,
-        message,
-        timestamp,
-        sourceUrl,
-      }),
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
     });
 
-    if (adminError) {
-      // Log the Resend error code/message without exposing to the client.
-      console.error("[contact] Resend admin email error:", {
-        name: adminError.name,
-        message: adminError.message,
-        fromEmail,
-        toEmail: contactEmail,
-      });
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      console.error("[contact] Web3Forms API error:", result);
       return {
         success: false,
-        message: "Unable to submit your request right now. Please try again or contact me directly at sahilmahida786@gmail.com",
+        message: "Unable to submit your request right now. Please try again or email me directly.",
       };
     }
 
-    console.log("[contact] Admin notification sent. ID:", adminData?.id);
-
-    // 5. Send customer confirmation (non-blocking — failure doesn't affect the user's submission)
-    const { error: customerError } = await resend.emails.send({
-      from: `Sahil Mahida <${fromEmail}>`,
-      to: [email],
-      subject: "✅ Project inquiry received — SAHIL.OS",
-      react: React.createElement(CustomerConfirmation, {
-        name,
-        projectType,
-        message,
-      }),
-    });
-
-    if (customerError) {
-      console.error("[contact] Resend customer confirmation error:", {
-        name: customerError.name,
-        message: customerError.message,
-      });
-      // Do not fail the submission — the admin email succeeded.
-    }
-
-    // 6. Success
+    // 5. Success
     return {
       success: true,
-      message: "Your project inquiry has been successfully submitted.",
+      message: "Thank you! Your project request has been received. I'll get back to you soon.",
     };
   } catch (error) {
     // Catch-all — log a safe representation of the error without PII.
@@ -143,7 +109,7 @@ export async function submitContactForm(
     console.error("[contact] Unexpected error in submitContactForm:", safeMessage);
     return {
       success: false,
-      message: "An unexpected error occurred. Please try again later or email me directly.",
+      message: "Unable to submit your request right now. Please try again or email me directly.",
     };
   }
 }
