@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Input from "@/components/ui/Input";
@@ -8,9 +9,7 @@ import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import { Send } from "lucide-react";
-
-import { useActionState } from "react";
-import { submitContactForm } from "@/app/actions/contact";
+import { z } from "zod";
 
 const projectTypes = [
   { value: "website", label: "Website" },
@@ -20,11 +19,118 @@ const projectTypes = [
   { value: "other", label: "Other" },
 ];
 
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
+  email: z.string().email("Invalid email address"),
+  projectType: z.string().min(1, "Please select a project type"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(3000, "Message is too long (max 3000 chars)"),
+  company_website: z.string().max(0, "Invalid submission"),
+});
+
 export default function Contact() {
-  const [state, formAction, isPending] = useActionState(submitContactForm, {
+  const [isPending, setIsPending] = useState(false);
+  const [state, setState] = useState<{
+    success: boolean;
+    message: string;
+    errors?: Record<string, string[]>;
+  }>({
     success: false,
     message: "",
   });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setState({ success: false, message: "", errors: {} });
+
+    const formData = new FormData(e.currentTarget);
+    const rawData = {
+      name: (formData.get("name") as string) ?? "",
+      email: (formData.get("email") as string) ?? "",
+      projectType: (formData.get("projectType") as string) ?? "",
+      message: (formData.get("message") as string) ?? "",
+      company_website: (formData.get("company_website") as string) ?? "",
+    };
+
+    // Client-side Zod Validation
+    const validatedFields = contactSchema.safeParse(rawData);
+
+    if (!validatedFields.success) {
+      if (validatedFields.error.flatten().fieldErrors.company_website) {
+        setState({ success: true, message: "Thank you! Your project request has been received. I'll get back to you soon." });
+        setIsPending(false);
+        return;
+      }
+
+      setState({
+        success: false,
+        message: "Please correct the errors in the form.",
+        errors: validatedFields.error.flatten().fieldErrors,
+      });
+      setIsPending(false);
+      return;
+    }
+
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    
+    if (!accessKey) {
+      console.error("[contact] NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is not set.");
+      setState({
+        success: false,
+        message: "Unable to submit your request right now. Please try again or email me directly.",
+      });
+      setIsPending(false);
+      return;
+    }
+
+    const payload = {
+      access_key: accessKey,
+      subject: "New Project Inquiry — Sahil Mahida Portfolio",
+      from_name: "SAHIL.OS Portfolio",
+      replyto: rawData.email,
+      name: rawData.name,
+      email: rawData.email,
+      "Project Type": rawData.projectType,
+      message: rawData.message,
+    };
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        console.error("[contact] Web3Forms API error:", result);
+        setState({
+          success: false,
+          message: "Unable to submit your request right now. Please try again or email me directly.",
+        });
+      } else {
+        setState({
+          success: true,
+          message: "Thank you! Your project request has been received. I'll get back to you soon.",
+        });
+      }
+    } catch (error) {
+      console.error("[contact] Network error in submitContactForm:", error);
+      setState({
+        success: false,
+        message: "Unable to submit your request right now. Please try again or email me directly.",
+      });
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   return (
     <section
@@ -46,7 +152,7 @@ export default function Contact() {
             {/* Form */}
             <form
               className="lg:col-span-3 space-y-6"
-              action={formAction}
+              onSubmit={handleSubmit}
             >
               {/* Honeypot field - visually hidden to catch bots */}
               <div aria-hidden="true" className="hidden opacity-0 absolute pointer-events-none -left-[9999px]">
@@ -171,4 +277,3 @@ export default function Contact() {
     </section>
   );
 }
-
