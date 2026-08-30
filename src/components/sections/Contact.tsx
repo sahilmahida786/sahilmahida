@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Input from "@/components/ui/Input";
@@ -10,6 +10,7 @@ import Button from "@/components/ui/Button";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import { Send } from "lucide-react";
 import { z } from "zod";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const projectTypes = [
   { value: "website", label: "Website" },
@@ -32,6 +33,9 @@ const contactSchema = z.object({
 
 export default function Contact() {
   const [isPending, setIsPending] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
+
   const [state, setState] = useState<{
     success: boolean;
     message: string;
@@ -45,6 +49,15 @@ export default function Contact() {
     e.preventDefault();
     setIsPending(true);
     setState({ success: false, message: "", errors: {} });
+
+    if (!captchaToken) {
+      setState({
+        success: false,
+        message: "Please complete the human verification.",
+      });
+      setIsPending(false);
+      return;
+    }
 
     const formData = new FormData(e.currentTarget);
     const rawData = {
@@ -95,6 +108,7 @@ export default function Contact() {
       email: rawData.email,
       "Project Type": rawData.projectType,
       message: rawData.message,
+      "h-captcha-response": captchaToken,
     };
 
     try {
@@ -120,6 +134,9 @@ export default function Contact() {
           success: true,
           message: "Thank you! Your project request has been received. I'll get back to you soon.",
         });
+        // Reset the captcha visually
+        captchaRef.current?.resetCaptcha();
+        setCaptchaToken(null);
       }
     } catch (error) {
       console.error("[contact] Network error in submitContactForm:", error);
@@ -226,7 +243,22 @@ export default function Contact() {
                     {state.errors?.message && <p className="text-caption text-red-400">{state.errors.message[0]}</p>}
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full sm:w-auto group" disabled={isPending}>
+                  {/* hCaptcha Widget */}
+                  <div className="w-full flex justify-start sm:justify-start">
+                    <div className="max-w-full overflow-x-auto">
+                      <HCaptcha
+                        sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                        onVerify={setCaptchaToken}
+                        onExpire={() => setCaptchaToken(null)}
+                        onError={() => setCaptchaToken(null)}
+                        reCaptchaCompat={false}
+                        ref={captchaRef}
+                        theme="dark"
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" size="lg" className="w-full sm:w-auto group" disabled={isPending || !captchaToken}>
                     {isPending ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
