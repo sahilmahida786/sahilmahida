@@ -23,8 +23,8 @@
 
   /* Foreground / text */
   --color-foreground: hsl(0 0% 94%);
-  --color-muted: hsl(220 10% 54%);
-  --color-subtle: hsl(220 8% 36%);
+  --color-muted: hsl(220 10% 60%);
+  --color-subtle: hsl(220 10% 50%);
 
   /* Accent */
   --color-accent: hsl(210 100% 60%);
