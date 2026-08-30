@@ -34,6 +34,7 @@ const contactSchema = z.object({
 export default function Contact() {
   const [isPending, setIsPending] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
   const captchaRef = useRef<HCaptcha>(null);
 
   const [state, setState] = useState<{
@@ -170,6 +171,8 @@ export default function Contact() {
             <form
               className="lg:col-span-3 space-y-6"
               onSubmit={handleSubmit}
+              onFocus={() => setShowCaptcha(true)}
+              onClick={() => setShowCaptcha(true)}
             >
               {/* Honeypot field - visually hidden to catch bots */}
               <div aria-hidden="true" className="hidden opacity-0 absolute pointer-events-none -left-[9999px]">
@@ -244,19 +247,21 @@ export default function Contact() {
                   </div>
 
                   {/* hCaptcha Widget */}
-                  <div className="w-full flex justify-start sm:justify-start">
-                    <div className="max-w-full overflow-x-auto">
-                      <HCaptcha
-                        sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                        onVerify={setCaptchaToken}
-                        onExpire={() => setCaptchaToken(null)}
-                        onError={() => setCaptchaToken(null)}
-                        reCaptchaCompat={false}
-                        ref={captchaRef}
-                        theme="dark"
-                      />
+                  {showCaptcha && (
+                    <div className="w-full flex justify-start sm:justify-start animate-in fade-in duration-500">
+                      <div className="max-w-full overflow-x-auto">
+                        <HCaptcha
+                          sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
+                          onVerify={setCaptchaToken}
+                          onExpire={() => setCaptchaToken(null)}
+                          onError={() => setCaptchaToken(null)}
+                          reCaptchaCompat={false}
+                          ref={captchaRef}
+                          theme="dark"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <Button type="submit" size="lg" className="w-full sm:w-auto group" disabled={isPending || !captchaToken}>
                     {isPending ? (
