@@ -82,7 +82,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const prevProject = projectIndex > 0 ? projects[projectIndex - 1] : undefined;
   const nextProject = projectIndex < projects.length - 1 ? projects[projectIndex + 1] : undefined;
 
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.com";
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.in";
   
   const jsonLd = {
     "@context": "https://schema.org",
