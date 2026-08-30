@@ -315,9 +315,9 @@ export default function Navigation() {
                     width: "100%",
                     borderRadius: "10px",
                     background: "linear-gradient(135deg, #3b82f6, #2563eb)",
-                    color: "#fff",
+                    color: "var(--color-background)",
                     fontSize: "1rem",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     textDecoration: "none",
                     boxShadow: "0 4px 20px rgba(59,130,246,0.25)",
                     WebkitTapHighlightColor: "transparent",
@@ -388,7 +388,7 @@ export default function Navigation() {
               className={cn(
                 "ml-4 inline-flex items-center gap-1.5",
                 "h-9 px-4 rounded-[var(--radius-md)]",
-                "bg-accent text-white text-body-sm font-medium",
+                "bg-accent text-background text-body-sm font-bold",
                 "transition-all duration-[var(--duration-fast)]",
                 "hover:bg-accent-hover"
               )}
