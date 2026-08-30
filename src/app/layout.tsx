@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import SmoothScrollProvider from "@/components/layout/SmoothScrollProvider";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import StructuredData from "@/components/seo/StructuredData";
+import BackToTop from "@/components/ui/BackToTop";
 import "./globals.css";
 
 /**
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Navigation />
           <main id="main-content">{children}</main>
           <Footer />
+          <BackToTop />
         </SmoothScrollProvider>
       </body>
     </html>
