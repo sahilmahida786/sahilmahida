@@ -5,12 +5,6 @@ import Divider from "@/components/ui/Divider";
 import { Phone, Mail, ArrowUpRight } from "lucide-react";
 import { navigation } from "@/data/navigation";
 
-const GithubIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3-.3 6-1.5 6-6.5 0-1.4-.5-2.5-1.5-3.4.1-.3.6-1.6-.1-3.3 0 0-1.2-.4-3.9 2.1a14 14 0 0 0-7 0C3.9 1.3 2.7 1.7 2.7 1.7c-.7 1.8-.2 3 .1 3.3C1.8 5.9 1.3 7 1.3 8.5c0 5 3 6.2 6 6.5-.4.4-.8 1.1-.9 2.2-.8.4-2.8 1-4.2-1.2-.2-.4-1.2-1.3-2.3-1.4-.2 0-.2.1-.1.2.5.3 1 1.4 1.3 2 1 2.8 3.5 2.1 4.5 2" />
-  </svg>
-);
-
 const LinkedinIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -87,19 +81,10 @@ export default function Footer() {
             {/* Social Icons */}
             <div className="mt-8 flex items-center gap-4">
               <a
-                href="https://github.com/sahilmahida786"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 -ml-2 text-subtle hover:text-foreground hover:bg-white/5 rounded-full transition-all duration-200"
-                aria-label="GitHub"
-              >
-                <GithubIcon />
-              </a>
-              <a
                 href="https://www.linkedin.com/in/sahil-mahida-115835317"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-subtle hover:text-foreground hover:bg-white/5 rounded-full transition-all duration-200"
+                className="p-2 -ml-2 text-subtle hover:text-foreground hover:bg-white/5 rounded-full transition-all duration-200"
                 aria-label="LinkedIn"
               >
                 <LinkedinIcon />
