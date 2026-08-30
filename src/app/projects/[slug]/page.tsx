@@ -41,13 +41,13 @@ export async function generateMetadata({
   }
 
   return createMetadata({
-    title: `${project.name} — Case Study | Sahil Mahida`,
+    title: `${project.name} | ${project.tagline} | Sahil Mahida`,
     description: project.tagline,
     alternates: {
       canonical: `/projects/${project.slug}`,
     },
     openGraph: {
-      title: `${project.name} — Case Study | Sahil Mahida`,
+      title: `${project.name} | ${project.tagline} | Sahil Mahida`,
       description: project.tagline,
       images: project.ogImage && project.ogImage.src !== '/images/placeholder.jpg' ? [
         {
@@ -60,7 +60,7 @@ export async function generateMetadata({
       ] : undefined
     },
     twitter: {
-      title: `${project.name} — Case Study | Sahil Mahida`,
+      title: `${project.name} | ${project.tagline} | Sahil Mahida`,
       description: project.tagline,
       images: project.ogImage && project.ogImage.src !== '/images/placeholder.jpg' ? [project.ogImage.src] : undefined,
     }

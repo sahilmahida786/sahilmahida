@@ -1,7 +1,7 @@
 export const personal = {
   name: "Sahil Mahida",
   title: "Full-Stack Python Developer",
-  tagline: "I build digital products from code to launch.",
+  tagline: "I build high-performance websites, AI solutions, automation systems, and custom web applications from Rajkot, Gujarat.",
   experience: "2+",
   experienceUnit: "years",
   education: {

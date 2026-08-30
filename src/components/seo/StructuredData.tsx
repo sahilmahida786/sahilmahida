@@ -1,7 +1,7 @@
 import Script from "next/script";
 import { personal } from "@/data/personal";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.in";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.vercel.app";
 
 export default function StructuredData() {
   const jsonLd = {
@@ -11,7 +11,7 @@ export default function StructuredData() {
         "@type": "Person",
         "@id": `${BASE_URL}/#person`,
         name: personal.name,
-        jobTitle: "Software Developer & Digital Solutions Provider",
+        jobTitle: "Full-Stack Python Developer",
         url: BASE_URL,
         sameAs: [
           personal.socials.github,
@@ -30,7 +30,7 @@ export default function StructuredData() {
       {
         "@type": "LocalBusiness",
         "@id": `${BASE_URL}/#business`,
-        name: `${personal.name} | Digital Solutions`,
+        name: `${personal.name} | Full-Stack Python Developer`,
         image: `${BASE_URL}/images/sahil-mahida-logo.webp`,
         logo: `${BASE_URL}/images/sahil-mahida-logo.webp`,
         url: BASE_URL,
@@ -52,7 +52,7 @@ export default function StructuredData() {
         "@type": "WebSite",
         "@id": `${BASE_URL}/#website`,
         url: BASE_URL,
-        name: `${personal.name} | Digital Solutions`,
+        name: `${personal.name} | Full-Stack Python Developer`,
         publisher: {
           "@id": `${BASE_URL}/#person`,
         },

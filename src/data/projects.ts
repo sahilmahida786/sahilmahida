@@ -56,13 +56,13 @@ export const projects: Project[] = [
       { title: "AI-Assisted Verification", description: "Ensures accuracy and consistency in extracted data." }
     ],
     
-    thumbnail: { src: "/images/placeholder.jpg", alt: "Thumbnail", width: 800, height: 600 },
-    hero: { src: "/images/placeholder.jpg", alt: "Hero", width: 1920, height: 1080 },
+    thumbnail: { src: "/images/placeholder.jpg", alt: "QuantAI financial intelligence platform dashboard", width: 800, height: 600 },
+    hero: { src: "/images/placeholder.jpg", alt: "QuantAI automated intelligence pipeline overview", width: 1920, height: 1080 },
     screenshots: [
-      { src: "/images/placeholder.jpg", alt: "Architecture", width: 1200, height: 800 },
-      { src: "/images/placeholder.jpg", alt: "Output", width: 1200, height: 800 }
+      { src: "/images/placeholder.jpg", alt: "QuantAI system architecture", width: 1200, height: 800 },
+      { src: "/images/placeholder.jpg", alt: "QuantAI structured intelligence output", width: 1200, height: 800 }
     ],
-    ogImage: { src: "/images/placeholder.jpg", alt: "OG", width: 1200, height: 630 },
+    ogImage: { src: "/images/placeholder.jpg", alt: "QuantAI AI financial intelligence platform", width: 1200, height: 630 },
     
     featured: true,
     order: 1,

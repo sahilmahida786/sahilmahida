@@ -38,7 +38,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = createMetadata({
   title: "Sahil Mahida | Full-Stack Python Developer in Rajkot, Gujarat",
   description:
-    "Sahil Mahida is a Software Developer & Digital Solutions Provider based in Rajkot, Gujarat. Specializing in Python, AI, automation, and custom web development.",
+    "Sahil Mahida is a Full-Stack Python Developer in Rajkot, Gujarat, building high-performance websites, AI solutions, automation systems, and custom web applications.",
 });
 
 export default function RootLayout({

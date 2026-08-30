@@ -47,7 +47,7 @@ export default function Footer() {
               <div className="relative h-12 w-48 md:h-14 md:w-56">
                 <Image
                   src="/images/logo/sahil-mahida-logo.webp"
-                  alt="Sahil Mahida"
+                  alt="Sahil Mahida Full-Stack Python Developer portfolio logo"
                   fill
                   className="object-contain object-left"
                   sizes="(max-width: 768px) 192px, 224px"
@@ -56,7 +56,7 @@ export default function Footer() {
             </Link>
 
             <h3 className="text-body font-bold text-foreground/90">
-              Software Developer & Digital Solutions Provider
+              Full-Stack Python Developer
             </h3>
             <p className="mt-1 text-body-sm text-muted">
               Rajkot, Gujarat, India

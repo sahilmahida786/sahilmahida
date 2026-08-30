@@ -203,7 +203,7 @@ export default function Navigation() {
                 <div style={{ position: "relative", height: "40px", width: "160px" }}>
                   <Image
                     src="/images/logo/sahil-mahida-logo.webp"
-                    alt="Sahil Mahida"
+                    alt="Sahil Mahida Full-Stack Python Developer portfolio logo"
                     fill
                     className="object-contain object-left"
                     sizes="160px"
