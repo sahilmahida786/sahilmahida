@@ -61,8 +61,9 @@ export default function BackToTop() {
           : "translate-y-8 opacity-0 pointer-events-none"
       )}
       style={{
-        // Ensure it sits above mobile browser UI bars safely
-        bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))"
+        // Ensure it sits above mobile browser UI bars safely and is forced to the right
+        bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))",
+        right: "1rem",
       }}
     >
       <ArrowUp size={20} strokeWidth={2.5} aria-hidden="true" />
