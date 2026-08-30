@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Experimental features for performance
+  experimental: {
+    optimizeCss: true, // Inlines critical CSS to eliminate render-blocking requests
+  },
+
   // Image optimization — add remote patterns when external images are used
   images: {
     formats: ["image/avif", "image/webp"],
