@@ -54,7 +54,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     name: service.title,
     provider: {
       "@type": "LocalBusiness",
-      name: `${personal.name} | Digital Solutions`,
+      name: `${personal.name} | Software Developer & Digital Solutions Provider`,
       address: {
         "@type": "PostalAddress",
         addressLocality: "Rajkot",

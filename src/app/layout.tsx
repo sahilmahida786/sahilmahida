@@ -37,9 +37,9 @@ const jetbrainsMono = JetBrains_Mono({
  * Individual pages override via their own metadata exports.
  */
 export const metadata: Metadata = createMetadata({
-  title: "Sahil Mahida | Full-Stack Python Developer in Rajkot, Gujarat",
+  title: "Sahil Mahida | Software Developer & Digital Solutions Provider in Rajkot, Gujarat",
   description:
-    "Sahil Mahida is a Full-Stack Python Developer in Rajkot, Gujarat, building high-performance websites, AI solutions, automation systems, and custom web applications.",
+    "Sahil Mahida is a Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India. Specializing in Web Development, Custom Software, Python, AI Solutions, and Business Automation.",
 });
 
 export default function RootLayout({

@@ -3,9 +3,9 @@ import { personal } from "@/data/personal";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${personal.name} | Digital Solutions`,
+    name: `${personal.name} | Software Developer & Digital Solutions Provider`,
     short_name: "SAHIL.OS",
-    description: personal.tagline,
+    description: "Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India.",
     start_url: "/",
     display: "standalone",
     background_color: "#05070B", // Dark premium background

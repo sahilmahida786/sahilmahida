@@ -11,7 +11,7 @@ export default function StructuredData() {
         "@type": "Person",
         "@id": `${BASE_URL}/#person`,
         name: personal.name,
-        jobTitle: "Full-Stack Python Developer",
+        jobTitle: "Software Developer & Digital Solutions Provider",
         url: BASE_URL,
         sameAs: [
           personal.socials.github,
@@ -30,7 +30,7 @@ export default function StructuredData() {
       {
         "@type": "LocalBusiness",
         "@id": `${BASE_URL}/#business`,
-        name: `${personal.name} | Full-Stack Python Developer`,
+        name: `${personal.name} | Software Developer & Digital Solutions Provider`,
         image: `${BASE_URL}/images/sahil-mahida-logo.webp`,
         logo: `${BASE_URL}/images/sahil-mahida-logo.webp`,
         url: BASE_URL,
@@ -52,7 +52,7 @@ export default function StructuredData() {
         "@type": "WebSite",
         "@id": `${BASE_URL}/#website`,
         url: BASE_URL,
-        name: `${personal.name} | Full-Stack Python Developer`,
+        name: `${personal.name} | Software Developer & Digital Solutions Provider`,
         publisher: {
           "@id": `${BASE_URL}/#person`,
         },

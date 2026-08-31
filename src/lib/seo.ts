@@ -8,10 +8,10 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.vercel
  * Uses Next.js metadata API for automatic <head> generation.
  */
 export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
-  const title = overrides.title || `${personal.name} | Full-Stack Python Developer in Rajkot, Gujarat`;
+  const title = overrides.title || `${personal.name} | Software Developer & Digital Solutions Provider`;
   const description =
     (overrides.description as string) ||
-    `${personal.name} is a Full-Stack Python Developer in Rajkot, Gujarat, building high-performance websites, AI solutions, automation systems, and custom web applications.`;
+    `${personal.name} is a Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India. Specializing in Web Development, Custom Software, Python, AI Solutions, and Business Automation.`;
 
   return {
     title,
@@ -26,7 +26,7 @@ export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
       title: title as string,
       description,
       url: BASE_URL,
-      siteName: `${personal.name} | Full-Stack Python Developer`,
+      siteName: `${personal.name} | Software Developer & Digital Solutions Provider`,
       locale: "en_IN",
       type: "website",
       images: [
@@ -34,7 +34,7 @@ export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
           url: "/opengraph-image", // Resolved via metadataBase
           width: 1200,
           height: 630,
-          alt: `${personal.name} - Full-Stack Python Developer in Rajkot`,
+          alt: `${personal.name} - Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India`,
           type: "image/png",
         },
       ],
