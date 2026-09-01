@@ -17,9 +17,8 @@ export default function BackToTop() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Request animation frame is not strictly necessary for simple boolean state
-      // but ensures the check runs efficiently.
-      setIsVisible(window.scrollY > 400);
+      // Show only after scrolling past the hero section (approx 1 viewport height)
+      setIsVisible(window.scrollY > window.innerHeight * 0.8);
     };
 
     // Initial check on mount
@@ -49,21 +48,21 @@ export default function BackToTop() {
       aria-hidden={!isVisible}
       tabIndex={isVisible ? 0 : -1}
       className={cn(
-        "fixed right-4 sm:right-8 z-40",
-        "flex h-11 w-11 items-center justify-center rounded-full",
-        "bg-accent text-background shadow-[0_4px_14px_rgba(59,130,246,0.25)]",
+        "fixed z-50",
+        "flex h-11 w-11 items-center justify-center rounded-[10px]",
+        "bg-accent text-white shadow-lg border border-white/10",
         "transition-all duration-300 ease-[var(--ease-out)]",
-        "hover:bg-accent-hover hover:scale-105 active:scale-95",
+        "hover:bg-accent-hover hover:-translate-y-1 active:scale-95",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        "motion-reduce:transition-opacity motion-reduce:hover:scale-100", // Respect reduced motion
+        "motion-reduce:transition-opacity motion-reduce:hover:-translate-y-0", 
         isVisible
           ? "translate-y-0 opacity-100 pointer-events-auto"
           : "translate-y-8 opacity-0 pointer-events-none"
       )}
       style={{
-        // Ensure it sits above mobile browser UI bars safely and is forced to the right
-        bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))",
-        right: "1rem",
+        // Use inline styles to absolutely guarantee it sits on the bottom right
+        bottom: "calc(2rem + env(safe-area-inset-bottom, 0px))",
+        right: "1.5rem",
       }}
     >
       <ArrowUp size={20} strokeWidth={2.5} aria-hidden="true" />
