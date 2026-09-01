@@ -17,8 +17,9 @@ export default function BackToTop() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show only after scrolling past the hero section (approx 1 viewport height)
-      setIsVisible(window.scrollY > window.innerHeight * 0.8);
+      // Ensure it doesn't show in the hero section (which is typically ~100vh)
+      // 600px is a safe threshold that guarantees we're past the initial hero view on most devices
+      setIsVisible(window.scrollY > 600);
     };
 
     // Initial check on mount
@@ -48,10 +49,10 @@ export default function BackToTop() {
       aria-hidden={!isVisible}
       tabIndex={isVisible ? 0 : -1}
       className={cn(
-        "fixed z-50",
-        "flex h-11 w-11 items-center justify-center rounded-[10px]",
-        "bg-accent text-white shadow-lg border border-white/10",
-        "transition-all duration-300 ease-[var(--ease-out)]",
+        "fixed z-[9999]",
+        "flex h-12 w-12 items-center justify-center rounded-md",
+        "bg-accent text-white shadow-lg border border-accent/20",
+        "transition-all duration-300 ease-in-out",
         "hover:bg-accent-hover hover:-translate-y-1 active:scale-95",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "motion-reduce:transition-opacity motion-reduce:hover:-translate-y-0", 
@@ -65,7 +66,7 @@ export default function BackToTop() {
         right: "1.5rem",
       }}
     >
-      <ArrowUp size={20} strokeWidth={2.5} aria-hidden="true" />
+      <ArrowUp size={24} strokeWidth={2.5} aria-hidden="true" />
     </button>
   );
 }
