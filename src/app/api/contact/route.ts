@@ -163,6 +163,10 @@ export async function POST(request: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        // Forward client headers to bypass Web3Forms server-side restrictions on free tiers
+        "User-Agent": request.headers.get("user-agent") || "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        Origin: request.headers.get("origin") || "https://sahilmahida.vercel.app",
+        Referer: request.headers.get("referer") || "https://sahilmahida.vercel.app/",
       },
       body: JSON.stringify(payload),
     });
