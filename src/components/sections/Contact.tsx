@@ -10,7 +10,8 @@ import Button from "@/components/ui/Button";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import { Send } from "lucide-react";
 import { z } from "zod";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { Turnstile } from "@marsidev/react-turnstile";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 
 const projectTypes = [
   { value: "website", label: "Website" },
@@ -33,9 +34,9 @@ const contactSchema = z.object({
 
 export default function Contact() {
   const [isPending, setIsPending] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [showCaptcha, setShowCaptcha] = useState(false);
-  const captchaRef = useRef<HCaptcha>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [showWidget, setShowWidget] = useState(false);
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const [state, setState] = useState<{
     success: boolean;
@@ -51,10 +52,10 @@ export default function Contact() {
     setIsPending(true);
     setState({ success: false, message: "", errors: {} });
 
-    if (!captchaToken) {
+    if (!turnstileToken) {
       setState({
         success: false,
-        message: "Please complete the human verification.",
+        message: "Please complete the human verification and try again.",
       });
       setIsPending(false);
       return;
@@ -69,16 +70,16 @@ export default function Contact() {
       company_website: (formData.get("company_website") as string) ?? "",
     };
 
-    // Client-side Zod Validation
+    // Client-side Zod validation (mirrors server for instant feedback)
     const validatedFields = contactSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
+      // Honeypot silently succeed
       if (validatedFields.error.flatten().fieldErrors.company_website) {
         setState({ success: true, message: "Thank you! Your project request has been received. I'll get back to you soon." });
         setIsPending(false);
         return;
       }
-
       setState({
         success: false,
         message: "Please correct the errors in the form.",
@@ -88,67 +89,46 @@ export default function Contact() {
       return;
     }
 
-    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
-    
-    if (!accessKey) {
-      console.error("[contact] NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is not set.");
-      setState({
-        success: false,
-        message: "Unable to submit your request right now. Please try again or email me directly.",
-      });
-      setIsPending(false);
-      return;
-    }
-
-    const payload = {
-      access_key: accessKey,
-      subject: "New Project Inquiry — Sahil Mahida Portfolio",
-      from_name: "SAHIL.OS Portfolio",
-      replyto: rawData.email,
-      name: rawData.name,
-      email: rawData.email,
-      "Project Type": rawData.projectType,
-      message: rawData.message,
-      "h-captcha-response": captchaToken,
-    };
-
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      // Send to our API route — server verifies Turnstile, then calls Web3Forms
+      const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...rawData,
+          turnstileToken,
+        }),
       });
 
-      const result = await response.json();
+      const result = await response.json() as { success: boolean; message: string; errors?: Record<string, string[]> };
 
-      if (!response.ok || !result.success) {
-        console.error("[contact] Web3Forms API error:", result);
-        setState({
-          success: false,
-          message: "Unable to submit your request right now. Please try again or email me directly.",
-        });
+      if (result.success) {
+        setState({ success: true, message: result.message });
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
       } else {
         setState({
-          success: true,
-          message: "Thank you! Your project request has been received. I'll get back to you soon.",
+          success: false,
+          message: result.message || "Unable to submit your request right now. Please try again or email me directly.",
+          errors: result.errors,
         });
-        // Reset the captcha visually
-        captchaRef.current?.resetCaptcha();
-        setCaptchaToken(null);
+        // Reset widget so a fresh token can be issued
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
       }
-    } catch (error) {
-      console.error("[contact] Network error in submitContactForm:", error);
+    } catch {
       setState({
         success: false,
         message: "Unable to submit your request right now. Please try again or email me directly.",
       });
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
     } finally {
       setIsPending(false);
     }
   };
+
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
   return (
     <section
@@ -171,10 +151,10 @@ export default function Contact() {
             <form
               className="lg:col-span-3 space-y-6"
               onSubmit={handleSubmit}
-              onFocus={() => setShowCaptcha(true)}
-              onClick={() => setShowCaptcha(true)}
+              onFocus={() => setShowWidget(true)}
+              onClick={() => setShowWidget(true)}
             >
-              {/* Honeypot field - visually hidden to catch bots */}
+              {/* Honeypot — invisible to humans, bots fill it */}
               <div aria-hidden="true" className="hidden opacity-0 absolute pointer-events-none -left-[9999px]">
                 <label htmlFor="company_website">Website</label>
                 <input type="text" id="company_website" name="company_website" tabIndex={-1} autoComplete="off" />
@@ -246,24 +226,30 @@ export default function Contact() {
                     {state.errors?.message && <p className="text-caption text-red-400">{state.errors.message[0]}</p>}
                   </div>
 
-                  {/* hCaptcha Widget */}
-                  {showCaptcha && (
-                    <div className="w-full flex justify-start sm:justify-start animate-in fade-in duration-500">
-                      <div className="max-w-full overflow-x-auto">
-                        <HCaptcha
-                          sitekey="50b2fe65-b00b-4b9e-ad62-3ba471098be2"
-                          onVerify={setCaptchaToken}
-                          onExpire={() => setCaptchaToken(null)}
-                          onError={() => setCaptchaToken(null)}
-                          reCaptchaCompat={false}
-                          ref={captchaRef}
-                          theme="dark"
-                        />
-                      </div>
+                  {/* Cloudflare Turnstile — lazy-loads on first form interaction */}
+                  {showWidget && siteKey && (
+                    <div className="w-full overflow-x-auto">
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={siteKey}
+                        onSuccess={setTurnstileToken}
+                        onExpire={() => setTurnstileToken(null)}
+                        onError={() => setTurnstileToken(null)}
+                        options={{
+                          theme: "dark",
+                          // Managed mode — Cloudflare decides if interaction is needed
+                          // Normal users typically see only a brief spinner then ✓
+                        }}
+                      />
                     </div>
                   )}
 
-                  <Button type="submit" size="lg" className="w-full sm:w-auto group" disabled={isPending || !captchaToken}>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full sm:w-auto group"
+                    disabled={isPending || !turnstileToken}
+                  >
                     {isPending ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
