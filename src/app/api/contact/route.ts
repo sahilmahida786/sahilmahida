@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
   if (!accessKey) {
     console.error("[CONTACT API] NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is not set in environment");
     return NextResponse.json(
-      { success: false, message: "Unable to submit your request right now. Please email me directly." },
+      { success: false, message: "Server config error: NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is missing in Vercel." },
       { status: 500 }
     );
   }
@@ -182,7 +182,7 @@ export async function POST(request: NextRequest) {
     if (!w3res.ok || !w3data.success) {
       console.error("[CONTACT API] Web3Forms submission failed. HTTP status:", w3res.status);
       return NextResponse.json(
-        { success: false, message: "Unable to submit your request right now. Please email me directly." },
+        { success: false, message: `Web3Forms Error (${w3res.status}): ${w3data.message || "Unknown error"}. Please check Web3Forms settings or Vercel logs.` },
         { status: 502 }
       );
     }
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.error("[CONTACT API] Web3Forms network error:", err instanceof Error ? err.message : String(err));
     return NextResponse.json(
-      { success: false, message: "Unable to submit your request right now. Please email me directly." },
+      { success: false, message: `Web3Forms Fetch Error: ${err instanceof Error ? err.message : "Network failure"}` },
       { status: 502 }
     );
   }
