@@ -90,20 +90,62 @@ export default function Contact() {
     }
 
     try {
-      // Send to our API route — server verifies Turnstile, then calls Web3Forms
-      const response = await fetch("/api/contact", {
+      // Step 1: Server-side Turnstile verification
+      const verifyRes = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...rawData,
-          turnstileToken,
-        }),
+        body: JSON.stringify({ turnstileToken }),
       });
+
+      const verifyResult = await verifyRes.json() as { success: boolean; message: string };
+
+      if (!verifyResult.success) {
+        setState({
+          success: false,
+          message: verifyResult.message || "Human verification failed. Please try again.",
+        });
+        turnstileRef.current?.reset();
+        setTurnstileToken(null);
+        setIsPending(false);
+        return;
+      }
+
+      // Step 2: Client-side Web3Forms submission
+      // Submitting from the browser bypasses Web3Forms's server block for free tier accounts.
+      const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+      
+      const payload = {
+        access_key: accessKey,
+        subject: "New Project Inquiry — Sahil Mahida Portfolio",
+        from_name: "SAHIL.OS Portfolio",
+        replyto: rawData.email,
+        name: rawData.name,
+        email: rawData.email,
+        "Project Type": rawData.projectType,
+        message: rawData.message,
+      };
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // Handle HTML / non-JSON responses safely if Web3Forms blocks the browser too (unlikely)
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        const rawText = await response.text();
+        console.error("[Contact] Web3Forms returned HTML:", rawText.slice(0, 200));
+        throw new Error("Web3Forms API returned HTML instead of JSON. Check your Web3Forms dashboard settings.");
+      }
 
       const result = await response.json() as { success: boolean; message: string; errors?: Record<string, string[]> };
 
       if (result.success) {
-        setState({ success: true, message: result.message });
+        setState({ success: true, message: "Thank you! Your project request has been received. I'll get back to you soon." });
         turnstileRef.current?.reset();
         setTurnstileToken(null);
       } else {
@@ -112,11 +154,11 @@ export default function Contact() {
           message: result.message || "Unable to submit your request right now. Please try again or email me directly.",
           errors: result.errors,
         });
-        // Reset widget so a fresh token can be issued
         turnstileRef.current?.reset();
         setTurnstileToken(null);
       }
-    } catch {
+    } catch (err) {
+      console.error("[Contact] Error during submission:", err);
       setState({
         success: false,
         message: "Unable to submit your request right now. Please try again or email me directly.",
