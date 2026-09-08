@@ -45,7 +45,7 @@ export default function HeroCore({ quality, reducedMotion }: HeroCoreProps) {
         color: new THREE.Color("hsl(210, 100%, 55%)"),
         wireframe: true,
         transparent: true,
-        opacity: 0.15,
+        opacity: 0.25, // was 0.15 — too faint on desktop
       }),
     []
   );
@@ -55,7 +55,7 @@ export default function HeroCore({ quality, reducedMotion }: HeroCoreProps) {
       new THREE.MeshBasicMaterial({
         color: new THREE.Color("hsl(210, 80%, 50%)"),
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.14, // was 0.08 — too faint on desktop
         side: THREE.DoubleSide,
       }),
     []

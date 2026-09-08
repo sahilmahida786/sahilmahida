@@ -43,10 +43,13 @@ function detectGPUTier(): DeviceCapability["gpuTier"] {
     const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) as string;
     const rendererLower = renderer.toLowerCase();
 
-    // Low-end indicators
+    // Low-end indicators — only genuinely incapable GPUs
+    // NOTE: "intel hd" and "intel uhd" were intentionally removed.
+    // Intel UHD/HD integrated graphics are present on the vast majority of
+    // laptops and desktops and are perfectly capable of rendering a simple
+    // icosahedron + particle system. Classifying them as "low" caused the
+    // 3D scene to be entirely skipped on desktop, showing a blank hero.
     const lowEndPatterns = [
-      "intel hd",
-      "intel uhd",
       "mali-4",
       "mali-t",
       "adreno 3",
