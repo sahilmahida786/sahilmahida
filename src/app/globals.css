@@ -232,6 +232,327 @@ body::after {
   }
 }
 
+/* ============================================================================
+ * GRADIENT RING SYSTEM
+ * ============================================================================
+ *
+ * Premium partial gradient rings that clip at section edges.
+ * Placement philosophy: ~1 ring per visual group, with deliberate empty space.
+ *
+ * Architecture:
+ *   - Pure CSS gradients — no canvas, no SVG filters, no JS
+ *   - pointer-events: none on all decorative elements
+ *   - overflow: hidden on parent sections prevents horizontal scroll
+ *   - GPU-friendly: only transform + opacity animated
+ *   - prefers-reduced-motion: animations disabled, rings remain visible
+ *   - z-index: always below content (z-0 / z-[-1])
+ *
+ * Sections decorated:
+ *   1. .ring-hero     — Hero: large partial ring, right edge, behind 3D
+ *   2. .ring-projects — Projects: left-edge partial ring
+ *   3. .ring-process  — EngineeringLab: centered ambient ring behind timeline
+ *   4. .ring-services — Services: right-edge ring, alternating with projects
+ *   5. .ring-contact  — Contact: very faint ambient ring, centered
+ * ============================================================================ */
+
+/* --- Shared ring base --- */
+.ring-hero,
+.ring-projects,
+.ring-process,
+.ring-services,
+.ring-contact {
+  position: relative;
+  /* overflow: hidden is set individually because some sections differ */
+}
+
+/* ── 1. HERO RING ──────────────────────────────────────────────────────────
+ * Large partial ring entering from the right edge.
+ * Sits between the dot-grid (z-0) and the 3D canvas (z-0).
+ * Does NOT cover hero text (text is z-10, ring is z-[1]).
+ * On mobile: reduced size, moved further right so it stays edge-only.
+ */
+.ring-hero::after {
+  content: "";
+  position: absolute;
+  /* Ring: 700px circle, top-right placement — partially clipped */
+  width: 700px;
+  height: 700px;
+  top: 50%;
+  right: -220px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  /* Multi-stop ring gradient: thin ring border effect */
+  background: transparent;
+  border: 1px solid transparent;
+  background-image:
+    /* Outer ambient glow — very faint fill for depth */
+    radial-gradient(
+      ellipse 80% 80% at 60% 45%,
+      hsla(215, 90%, 55%, 0.045) 0%,
+      hsla(240, 70%, 50%, 0.025) 40%,
+      transparent 70%
+    );
+  /* Ring border via box-shadow: the ring line effect */
+  box-shadow:
+    0 0 0 1px hsla(215, 90%, 60%, 0.09),
+    0 0 0 80px hsla(215, 80%, 55%, 0.018),
+    0 0 80px 0 hsla(230, 70%, 50%, 0.03);
+  pointer-events: none;
+  z-index: 1;
+  animation: ringFloat 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .ring-hero::after {
+    width: 420px;
+    height: 420px;
+    right: -160px;
+    opacity: 0.6;
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ring-hero::after {
+    width: 300px;
+    height: 300px;
+    right: -120px;
+    opacity: 0.4;
+  }
+}
+
+/* ── 2. PROJECTS RING ────────────────────────────────────────────────────
+ * Large partial ring entering from the LEFT edge.
+ * Creates editorial depth without touching project cards.
+ * overflow: hidden must be on the section (added via class).
+ */
+.ring-projects {
+  overflow: hidden;
+}
+
+.ring-projects::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  /* Left edge placement — mostly outside viewport */
+  top: 30%;
+  left: -280px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    0 0 0 1px hsla(210, 80%, 60%, 0.07),
+    0 0 0 60px hsla(210, 70%, 55%, 0.014),
+    0 0 60px 0 hsla(220, 60%, 45%, 0.025);
+  /* Subtle warm-edge multi-stop: blue → indigo */
+  background-image:
+    radial-gradient(
+      ellipse 70% 70% at 30% 50%,
+      hsla(220, 80%, 50%, 0.035) 0%,
+      hsla(255, 60%, 50%, 0.018) 50%,
+      transparent 75%
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: ringDrift 32s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .ring-projects::before {
+    width: 360px;
+    height: 360px;
+    left: -160px;
+    opacity: 0.55;
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ring-projects::before {
+    width: 260px;
+    height: 260px;
+    left: -120px;
+    opacity: 0.35;
+  }
+}
+
+/* ── 3. PROCESS RING (EngineeringLab) ────────────────────────────────────
+ * Centered ambient ring BEHIND the timeline.
+ * Must not obstruct step numbers or text.
+ * Uses a large, very low-opacity shape for atmospheric depth only.
+ */
+.ring-process {
+  overflow: hidden;
+}
+
+.ring-process::after {
+  content: "";
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  /* Center-right of section */
+  top: 50%;
+  right: -80px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-image:
+    radial-gradient(
+      ellipse 60% 60% at 60% 40%,
+      hsla(215, 75%, 55%, 0.032) 0%,
+      hsla(250, 55%, 48%, 0.016) 55%,
+      transparent 75%
+    );
+  box-shadow:
+    0 0 0 1px hsla(215, 80%, 60%, 0.055),
+    0 0 0 55px hsla(215, 70%, 55%, 0.01);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 1024px) {
+  .ring-process::after {
+    width: 380px;
+    height: 380px;
+    right: -100px;
+    opacity: 0.65;
+  }
+}
+
+@media (max-width: 768px) {
+  .ring-process::after {
+    width: 280px;
+    height: 280px;
+    right: -100px;
+    opacity: 0.4;
+  }
+}
+
+/* ── 4. SERVICES RING ────────────────────────────────────────────────────
+ * Right-edge partial ring — intentionally alternates with Projects (left).
+ * Complements the existing section-glow-services radial gradient.
+ */
+.ring-services {
+  overflow: hidden;
+}
+
+.ring-services::after {
+  content: "";
+  position: absolute;
+  width: 580px;
+  height: 580px;
+  top: 40%;
+  right: -240px;
+  transform: translateY(-40%);
+  border-radius: 50%;
+  background-image:
+    radial-gradient(
+      ellipse 65% 65% at 65% 45%,
+      hsla(215, 80%, 55%, 0.038) 0%,
+      hsla(260, 60%, 48%, 0.018) 50%,
+      transparent 73%
+    );
+  box-shadow:
+    0 0 0 1px hsla(215, 75%, 60%, 0.065),
+    0 0 0 55px hsla(220, 65%, 52%, 0.012),
+    0 0 50px 0 hsla(230, 55%, 45%, 0.02);
+  pointer-events: none;
+  z-index: 0;
+  animation: ringFloat 24s ease-in-out infinite reverse;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .ring-services::after {
+    width: 340px;
+    height: 340px;
+    right: -140px;
+    opacity: 0.5;
+    animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ring-services::after {
+    width: 240px;
+    height: 240px;
+    right: -110px;
+    opacity: 0.3;
+  }
+}
+
+/* ── 5. CONTACT RING ────────────────────────────────────────────────────
+ * Very faint ambient centered shape — barely perceptible.
+ * Just enough to create warmth without drawing attention.
+ * The existing section-glow-contact already covers the top,
+ * so this complements from the bottom-left.
+ */
+.ring-contact {
+  overflow: hidden;
+}
+
+.ring-contact::after {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  bottom: -100px;
+  left: -180px;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(
+      ellipse 55% 55% at 35% 60%,
+      hsla(215, 70%, 52%, 0.028) 0%,
+      hsla(250, 50%, 45%, 0.012) 55%,
+      transparent 75%
+    );
+  box-shadow:
+    0 0 0 1px hsla(215, 70%, 58%, 0.045);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .ring-contact::after {
+    width: 300px;
+    height: 300px;
+    bottom: -60px;
+    left: -120px;
+    opacity: 0.45;
+  }
+}
+
+/* ── Ring animations (GPU-only: transform + opacity) ─────────────────────
+ * Very slow, barely perceptible float/drift.
+ * Will-change: transform ensures GPU compositing.
+ * Reduced motion: disabled entirely (see bottom of file).
+ */
+@keyframes ringFloat {
+  0%, 100% { transform: translateY(-50%) translateX(0px) scale(1); }
+  33%       { transform: translateY(-52%) translateX(8px) scale(1.008); }
+  66%       { transform: translateY(-48%) translateX(-5px) scale(0.994); }
+}
+
+@keyframes ringDrift {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  40%       { transform: translateX(10px) translateY(-8px); }
+  70%       { transform: translateX(-6px) translateY(5px); }
+}
+
+/* Disable ring animations in reduced motion (rings remain visible) */
+@media (prefers-reduced-motion: reduce) {
+  .ring-hero::after {
+    animation: none;
+  }
+  .ring-projects::before {
+    animation: none;
+  }
+  .ring-services::after {
+    animation: none;
+  }
+}
+
 /* Ensure all content sits above atmospheric layers */
 body > * {
   position: relative;

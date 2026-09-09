@@ -30,7 +30,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative py-section bg-gradient-to-b from-background via-[hsl(225,20%,4.5%)] to-background"
+      className="ring-projects relative py-section bg-gradient-to-b from-background via-[hsl(225,20%,4.5%)] to-background"
       aria-labelledby="projects-heading"
     >
       <Container>

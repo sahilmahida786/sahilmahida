@@ -17,7 +17,7 @@ export default function EngineeringLab() {
   return (
     <section
       id="process"
-      className="relative py-section bg-gradient-to-b from-surface via-[hsl(225,16%,6.5%)] to-surface"
+      className="ring-process relative py-section bg-gradient-to-b from-surface via-[hsl(225,16%,6.5%)] to-surface"
       aria-labelledby="process-heading"
     >
       <RevealOnScroll>

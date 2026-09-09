@@ -10,7 +10,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="section-glow-services relative py-section bg-gradient-to-b from-background via-[hsl(225,18%,5%)] to-background"
+      className="section-glow-services ring-services relative py-section bg-gradient-to-b from-background via-[hsl(225,18%,5%)] to-background"
       aria-labelledby="services-heading"
     >
       <Container>

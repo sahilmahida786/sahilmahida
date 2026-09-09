@@ -175,7 +175,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="section-glow-contact relative py-section bg-gradient-to-b from-surface-elevated via-[hsl(225,14%,9.5%)] to-surface-elevated border-t border-border"
+      className="section-glow-contact ring-contact relative py-section bg-gradient-to-b from-surface-elevated via-[hsl(225,14%,9.5%)] to-surface-elevated border-t border-border"
       aria-labelledby="contact-heading"
     >
       <Container>

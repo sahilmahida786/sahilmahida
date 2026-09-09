@@ -17,7 +17,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="section-glow-hero relative min-h-[100svh] flex items-center overflow-hidden"
+      className="section-glow-hero ring-hero relative min-h-[100svh] flex items-center overflow-hidden"
       aria-label="Introduction"
     >
       {/* 3D Background Layer — client-only, no SSR */}
