@@ -181,7 +181,7 @@ export default function Contact() {
       <Container>
         <RevealOnScroll>
           <SectionHeader
-            eyebrow="05 / Contact"
+            eyebrow="06 / Contact"
             title="Start a Project"
             description="Have an idea? Let's turn it into a digital product."
           />

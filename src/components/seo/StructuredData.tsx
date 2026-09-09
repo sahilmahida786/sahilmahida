@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { personal } from "@/data/personal";
+import { faqs } from "@/data/faq";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sahilmahida.vercel.app";
 
@@ -66,6 +67,20 @@ export default function StructuredData() {
           },
           "query-input": "required name=search_term_string",
         },
+      },
+      {
+        // FAQPage — synchronized with visible FAQ accordion (src/data/faq.ts)
+        // Only contains questions actually shown to the user — no hidden SEO content.
+        "@type": "FAQPage",
+        "@id": `${BASE_URL}/#faq`,
+        mainEntity: faqs.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+          },
+        })),
       },
     ],
   };

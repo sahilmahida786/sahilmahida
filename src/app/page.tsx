@@ -4,6 +4,7 @@ import Projects from "@/components/sections/Projects";
 import TechCore from "@/components/sections/TechCore";
 import EngineeringLab from "@/components/sections/EngineeringLab";
 import Services from "@/components/sections/Services";
+import FAQ from "@/components/sections/FAQ";
 import Contact from "@/components/sections/Contact";
 import Divider from "@/components/ui/Divider";
 
@@ -24,6 +25,8 @@ export default function Home() {
       <EngineeringLab />
       <Divider variant="glow" />
       <Services />
+      <Divider variant="glow" />
+      <FAQ />
       <Divider variant="glow" />
       <Contact />
     </>
