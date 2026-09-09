@@ -285,18 +285,20 @@ body::after {
   background: transparent;
   border: 1px solid transparent;
   background-image:
-    /* Outer ambient glow — very faint fill for depth */
+    /* Outer ambient glow — richer gradient fill for depth */
     radial-gradient(
       ellipse 80% 80% at 60% 45%,
-      hsla(215, 90%, 55%, 0.045) 0%,
-      hsla(240, 70%, 50%, 0.025) 40%,
-      transparent 70%
+      hsla(215, 90%, 55%, 0.12) 0%,
+      hsla(240, 80%, 55%, 0.08) 30%,
+      hsla(270, 70%, 50%, 0.05) 50%,
+      hsla(320, 60%, 45%, 0.02) 70%,
+      transparent 80%
     );
   /* Ring border via box-shadow: the ring line effect */
   box-shadow:
-    0 0 0 1px hsla(215, 90%, 60%, 0.09),
-    0 0 0 80px hsla(215, 80%, 55%, 0.018),
-    0 0 80px 0 hsla(230, 70%, 50%, 0.03);
+    0 0 0 1px hsla(215, 90%, 60%, 0.15),
+    0 0 0 80px hsla(215, 80%, 55%, 0.03),
+    0 0 80px 0 hsla(230, 70%, 50%, 0.08);
   pointer-events: none;
   z-index: 1;
   animation: ringFloat 28s ease-in-out infinite;
@@ -342,16 +344,18 @@ body::after {
   border-radius: 50%;
   background: transparent;
   box-shadow:
-    0 0 0 1px hsla(210, 80%, 60%, 0.07),
-    0 0 0 60px hsla(210, 70%, 55%, 0.014),
-    0 0 60px 0 hsla(220, 60%, 45%, 0.025);
-  /* Subtle warm-edge multi-stop: blue → indigo */
+    0 0 0 1px hsla(215, 80%, 60%, 0.12),
+    0 0 0 60px hsla(210, 70%, 55%, 0.025),
+    0 0 60px 0 hsla(220, 60%, 45%, 0.06);
+  /* Subtle warm-edge multi-stop: blue → indigo → violet */
   background-image:
     radial-gradient(
       ellipse 70% 70% at 30% 50%,
-      hsla(220, 80%, 50%, 0.035) 0%,
-      hsla(255, 60%, 50%, 0.018) 50%,
-      transparent 75%
+      hsla(215, 90%, 55%, 0.10) 0%,
+      hsla(240, 80%, 55%, 0.07) 35%,
+      hsla(280, 60%, 50%, 0.04) 60%,
+      hsla(330, 50%, 45%, 0.015) 80%,
+      transparent 85%
     );
   pointer-events: none;
   z-index: 0;
@@ -400,13 +404,16 @@ body::after {
   background-image:
     radial-gradient(
       ellipse 60% 60% at 60% 40%,
-      hsla(215, 75%, 55%, 0.032) 0%,
-      hsla(250, 55%, 48%, 0.016) 55%,
-      transparent 75%
+      hsla(215, 85%, 55%, 0.12) 0%,
+      hsla(245, 75%, 55%, 0.08) 35%,
+      hsla(280, 65%, 50%, 0.05) 55%,
+      hsla(320, 50%, 45%, 0.02) 75%,
+      transparent 85%
     );
   box-shadow:
-    0 0 0 1px hsla(215, 80%, 60%, 0.055),
-    0 0 0 55px hsla(215, 70%, 55%, 0.01);
+    0 0 0 1px hsla(215, 85%, 60%, 0.15),
+    0 0 0 55px hsla(215, 75%, 55%, 0.03),
+    0 0 60px 0 hsla(230, 65%, 50%, 0.08);
   pointer-events: none;
   z-index: 0;
 }
@@ -449,14 +456,16 @@ body::after {
   background-image:
     radial-gradient(
       ellipse 65% 65% at 65% 45%,
-      hsla(215, 80%, 55%, 0.038) 0%,
-      hsla(260, 60%, 48%, 0.018) 50%,
-      transparent 73%
+      hsla(215, 85%, 55%, 0.11) 0%,
+      hsla(250, 75%, 55%, 0.07) 35%,
+      hsla(290, 65%, 50%, 0.04) 55%,
+      hsla(330, 55%, 45%, 0.015) 75%,
+      transparent 80%
     );
   box-shadow:
-    0 0 0 1px hsla(215, 75%, 60%, 0.065),
-    0 0 0 55px hsla(220, 65%, 52%, 0.012),
-    0 0 50px 0 hsla(230, 55%, 45%, 0.02);
+    0 0 0 1px hsla(215, 80%, 60%, 0.14),
+    0 0 0 55px hsla(220, 70%, 55%, 0.025),
+    0 0 50px 0 hsla(230, 60%, 50%, 0.07);
   pointer-events: none;
   z-index: 0;
   animation: ringFloat 24s ease-in-out infinite reverse;
@@ -503,12 +512,14 @@ body::after {
   background-image:
     radial-gradient(
       ellipse 55% 55% at 35% 60%,
-      hsla(215, 70%, 52%, 0.028) 0%,
-      hsla(250, 50%, 45%, 0.012) 55%,
-      transparent 75%
+      hsla(215, 80%, 55%, 0.08) 0%,
+      hsla(250, 70%, 55%, 0.05) 40%,
+      hsla(290, 60%, 50%, 0.02) 65%,
+      transparent 80%
     );
   box-shadow:
-    0 0 0 1px hsla(215, 70%, 58%, 0.045);
+    0 0 0 1px hsla(215, 75%, 60%, 0.10),
+    0 0 40px 0 hsla(220, 60%, 50%, 0.04);
   pointer-events: none;
   z-index: 0;
 }
