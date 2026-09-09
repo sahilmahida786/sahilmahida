@@ -52,9 +52,19 @@ export default function StructuredData() {
         "@type": "WebSite",
         "@id": `${BASE_URL}/#website`,
         url: BASE_URL,
-        name: `${personal.name} | Software Developer & Digital Solutions Provider`,
+        // Use just the personal name — Google displays this as the site brand in Search
+        name: personal.name,
+        description: "Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India",
         publisher: {
           "@id": `${BASE_URL}/#person`,
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${BASE_URL}/?s={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
         },
       },
     ],

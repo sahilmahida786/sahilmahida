@@ -14,6 +14,8 @@ export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
     `${personal.name} is a Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India. Specializing in Web Development, Custom Software, Python, AI Solutions, and Business Automation.`;
 
   return {
+    // applicationName is used by Google as the displayed site name in Search results
+    applicationName: personal.name,
     title,
     description,
     metadataBase: new URL(BASE_URL),
@@ -22,16 +24,17 @@ export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
     },
     authors: [{ name: personal.name, url: BASE_URL }],
     creator: personal.name,
+    publisher: personal.name,
     openGraph: {
       title: title as string,
       description,
       url: BASE_URL,
-      siteName: `${personal.name} | Software Developer & Digital Solutions Provider`,
+      siteName: personal.name,
       locale: "en_IN",
       type: "website",
       images: [
         {
-          url: "/opengraph-image", // Resolved via metadataBase
+          url: "/opengraph-image",
           width: 1200,
           height: 630,
           alt: `${personal.name} - Software Developer & Digital Solutions Provider in Rajkot, Gujarat, India`,
@@ -60,8 +63,16 @@ export function createMetadata(overrides: Partial<Metadata> = {}): Metadata {
       },
     },
     icons: {
-      icon: "/images/sahil-mahida-favicon.webp",
-      apple: "/images/sahil-mahida-favicon.webp",
+      // Next.js App Router also picks up src/app/icon.jpg automatically.
+      // These explicit declarations ensure broad browser & crawler coverage.
+      icon: [
+        { url: "/icon.jpg", type: "image/jpeg" },
+        { url: "/images/sahil-mahida-favicon.webp", type: "image/webp" },
+      ],
+      apple: [
+        { url: "/icon.jpg", type: "image/jpeg" },
+      ],
+      shortcut: "/icon.jpg",
     },
     ...overrides,
   };
