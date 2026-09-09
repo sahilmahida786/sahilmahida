@@ -436,6 +436,42 @@ body::after {
   }
 }
 
+/* SM Logo Watermark inside Process ring */
+.ring-process-logo {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  top: 50%;
+  right: -80px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Medium visibility (██████░░░░) — blends naturally as a background mark */
+  opacity: 0.22;
+  mix-blend-mode: plus-lighter;
+}
+
+@media (max-width: 1024px) {
+  .ring-process-logo {
+    width: 380px;
+    height: 380px;
+    right: -100px;
+    opacity: 0.18;
+  }
+}
+
+@media (max-width: 768px) {
+  .ring-process-logo {
+    width: 280px;
+    height: 280px;
+    right: -100px;
+    opacity: 0.12;
+  }
+}
+
 /* ── 4. SERVICES RING ────────────────────────────────────────────────────
  * Right-edge partial ring — intentionally alternates with Projects (left).
  * Complements the existing section-glow-services radial gradient.

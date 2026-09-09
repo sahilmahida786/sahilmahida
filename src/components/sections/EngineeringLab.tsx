@@ -1,6 +1,7 @@
 import Container from "@/components/ui/Container";
 import SectionHeader from "@/components/ui/SectionHeader";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import Image from "next/image";
 
 const stages = [
   { step: "01", label: "Idea", description: "Requirements, research, planning" },
@@ -20,6 +21,17 @@ export default function EngineeringLab() {
       className="ring-process relative py-section bg-gradient-to-b from-surface via-[hsl(225,16%,6.5%)] to-surface"
       aria-labelledby="process-heading"
     >
+      {/* Decorative Brand Watermark integrated with the CSS ring */}
+      <div className="ring-process-logo" aria-hidden="true">
+        <Image
+          src="/images/logo/mahida_logo.png"
+          alt=""
+          width={200}
+          height={200}
+          className="w-[24%] h-auto object-contain opacity-90"
+        />
+      </div>
+
       <RevealOnScroll>
         <Container>
           <SectionHeader
