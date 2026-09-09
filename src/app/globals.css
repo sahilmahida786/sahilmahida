@@ -324,6 +324,41 @@ body::after {
   }
 }
 
+/* SM Logo Watermark inside Hero ring */
+.ring-hero-logo {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  top: 50%;
+  right: -220px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.22;
+  mix-blend-mode: plus-lighter;
+}
+
+@media (max-width: 768px) {
+  .ring-hero-logo {
+    width: 420px;
+    height: 420px;
+    right: -160px;
+    opacity: 0.12;
+  }
+}
+
+@media (max-width: 480px) {
+  .ring-hero-logo {
+    width: 300px;
+    height: 300px;
+    right: -120px;
+    opacity: 0.08;
+  }
+}
+
 /* ── 2. PROJECTS RING ────────────────────────────────────────────────────
  * Large partial ring entering from the LEFT edge.
  * Creates editorial depth without touching project cards.

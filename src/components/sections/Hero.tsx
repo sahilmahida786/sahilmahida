@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { personal } from "@/data/personal";
 import Container from "@/components/ui/Container";
 import Badge from "@/components/ui/Badge";
@@ -23,6 +24,17 @@ export default function Hero() {
       {/* 3D Background Layer — client-only, no SSR */}
       <div className="absolute inset-0 z-0" aria-hidden="true">
         <HeroCanvasLoader />
+      </div>
+
+      {/* Decorative Brand Watermark integrated with the CSS ring */}
+      <div className="ring-hero-logo" aria-hidden="true">
+        <Image
+          src="/images/logo/mahida_logo.png"
+          alt=""
+          width={200}
+          height={200}
+          className="w-[24%] h-auto object-contain opacity-90"
+        />
       </div>
 
       {/* HTML Content Layer — always visible, always accessible */}
