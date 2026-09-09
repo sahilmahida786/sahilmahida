@@ -24,6 +24,7 @@ const projectTypes = [
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
   email: z.string().email("Invalid email address"),
+  phone: z.string().regex(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
   projectType: z.string().min(1, "Please select a project type"),
   message: z
     .string()
@@ -65,6 +66,7 @@ export default function Contact() {
     const rawData = {
       name: (formData.get("name") as string) ?? "",
       email: (formData.get("email") as string) ?? "",
+      phone: (formData.get("phone") as string) ?? "",
       projectType: (formData.get("projectType") as string) ?? "",
       message: (formData.get("message") as string) ?? "",
       company_website: (formData.get("company_website") as string) ?? "",
@@ -121,6 +123,7 @@ export default function Contact() {
         replyto: rawData.email,
         name: rawData.name,
         email: rawData.email,
+        phone: rawData.phone,
         "Project Type": rawData.projectType,
         message: rawData.message,
       };
@@ -243,17 +246,31 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <Select
-                      label="Project type"
-                      name="projectType"
-                      options={projectTypes}
-                      defaultValue=""
-                      required
-                      disabled={isPending}
-                      aria-invalid={!!state.errors?.projectType}
-                    />
-                    {state.errors?.projectType && <p className="text-caption text-red-400">{state.errors.projectType[0]}</p>}
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                      <Input
+                        label="Phone Number"
+                        name="phone"
+                        type="tel"
+                        placeholder="10-digit number"
+                        required
+                        disabled={isPending}
+                        aria-invalid={!!state.errors?.phone}
+                      />
+                      {state.errors?.phone && <p className="text-caption text-red-400">{state.errors.phone[0]}</p>}
+                    </div>
+                    <div className="space-y-1">
+                      <Select
+                        label="Project type"
+                        name="projectType"
+                        options={projectTypes}
+                        defaultValue=""
+                        required
+                        disabled={isPending}
+                        aria-invalid={!!state.errors?.projectType}
+                      />
+                      {state.errors?.projectType && <p className="text-caption text-red-400">{state.errors.projectType[0]}</p>}
+                    </div>
                   </div>
 
                   <div className="space-y-1">
