@@ -28,16 +28,27 @@ export default function HeroCanvasLoader() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    // Delay 3D canvas initialization to prioritize FCP and LCP of the HTML content
+    // Delay 3D canvas initialization to prioritize FCP and LCP of the HTML content.
+    // 600ms is enough to let the page paint text/CSS first without making the
+    // 3D scene feel absent on desktop.
     const timer = setTimeout(() => {
       setShouldLoad(true);
-    }, 1500); // 1.5s delay allows the page to fully render text/CSS first
+    }, 600);
     return () => clearTimeout(timer);
   }, []);
 
-  // Gracefully degrade on low-end devices or slow connections
-  if (device.gpuTier === "low" || device.connectionSpeed === "slow" || device.prefersReducedMotion) {
-    return null; // The CSS background glow will serve as the fallback
+  // Only skip the 3D canvas for explicit accessibility preferences or confirmed
+  // slow (2G) network. Never skip based on gpuTier alone — the scene is lightweight
+  // and Intel/AMD integrated GPUs on laptops/desktops handle it fine.
+  // gpuTier === "low" was previously blocking desktop rendering when Chrome used
+  // SwiftShader as a fallback renderer (WEBGL_debug_renderer_info returns "swiftshader").
+  const shouldSkip =
+    device.prefersReducedMotion ||
+    device.connectionSpeed === "slow" ||
+    !device.hasWebGL;
+
+  if (shouldSkip) {
+    return null; // The CSS background glow serves as the fallback
   }
 
   if (!shouldLoad) {
