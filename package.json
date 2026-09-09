@@ -37,9 +37,6 @@
   },
   "browserslist": {
     "production": [
-      ">0.3%",
-      "not dead",
-      "not op_mini all",
       "chrome >= 90",
       "firefox >= 90",
       "safari >= 15",

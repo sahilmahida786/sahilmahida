@@ -29,11 +29,20 @@ export default function HeroCanvasLoader() {
 
   useEffect(() => {
     // Delay 3D canvas initialization to prioritize FCP and LCP of the HTML content.
-    // 600ms is enough to let the page paint text/CSS first without making the
-    // 3D scene feel absent on desktop.
+    // On mobile, we delay significantly (2500ms) to ensure it doesn't block the main thread
+    // during critical metrics windows (PageSpeed Insights). On desktop, 600ms is sufficient.
+    const isMobile = window.innerWidth < 768;
+    const delay = isMobile ? 2500 : 600;
+
     const timer = setTimeout(() => {
-      setShouldLoad(true);
-    }, 600);
+      // Use requestIdleCallback if available to further ensure we don't block interaction
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(() => setShouldLoad(true), { timeout: 1000 });
+      } else {
+        setShouldLoad(true);
+      }
+    }, delay);
+    
     return () => clearTimeout(timer);
   }, []);
 

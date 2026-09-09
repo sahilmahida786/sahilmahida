@@ -1,12 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Experimental features for performance
-  experimental: {
-    optimizeCss: true, // Inlines critical CSS to eliminate render-blocking requests
-  },
-
-  // Image optimization — add remote patterns when external images are used
+  // Turbopack configuration (Next.js 16 default bundler)
   images: {
     formats: ["image/avif", "image/webp"],
   },
